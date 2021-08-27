@@ -2,14 +2,10 @@ package com.erdees.netgurushoppinglist.viewModel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.viewModelScope
-import com.erdees.netgurushoppinglist.model.ShoppingList
 import com.erdees.netgurushoppinglist.model.database.LocalDatabase
 import com.erdees.netgurushoppinglist.model.repository.ShoppingListRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
-class MainActivityViewModel(application: Application) : AndroidViewModel(application) {
+class ActiveShoppingListsFragmentViewModel(application: Application) : AndroidViewModel(application) {
 
     var shoppingListRepository: ShoppingListRepository
 
@@ -19,11 +15,5 @@ class MainActivityViewModel(application: Application) : AndroidViewModel(applica
     }
 
     val getActiveShoppingLists = shoppingListRepository.getActiveShoppingLists
-
-    fun addShoppingList(shoppingList : ShoppingList){
-       viewModelScope.launch(Dispatchers.IO) {
-           shoppingListRepository.addShoppingList(shoppingList)
-       }
-    }
 
 }

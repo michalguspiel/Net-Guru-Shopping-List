@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/activeShoppingList"
         android:title="Shopping Lists"
         android:icon="@drawable/ic_baseline_shopping_cart_24">
 
     </item>
 
-    <item android:title="Archived Shopping Lists"
+    <item
+        android:id="@+id/archivedShoppingList"
+        android:title="Archived Shopping Lists"
         android:icon="@drawable/ic_baseline_archive_24"></item>
 
 </menu>
