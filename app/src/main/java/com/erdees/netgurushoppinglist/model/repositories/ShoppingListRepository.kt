@@ -1,9 +1,11 @@
-package com.erdees.netgurushoppinglist.model.repository
+package com.erdees.netgurushoppinglist.model.repositories
 
 import com.erdees.netgurushoppinglist.model.ShoppingList
-import com.erdees.netgurushoppinglist.model.dao.ShoppingListDao
+import com.erdees.netgurushoppinglist.model.dao.ShoppingListsDao
+import javax.inject.Inject
 
-class ShoppingListRepository(private val shoppingListDao: ShoppingListDao) {
+class ShoppingListRepository
+    @Inject constructor(private val shoppingListDao: ShoppingListsDao) {
 
     val getActiveShoppingLists = shoppingListDao.getActiveShoppingLists()
 

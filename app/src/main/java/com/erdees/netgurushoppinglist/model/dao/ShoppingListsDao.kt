@@ -6,7 +6,7 @@ import com.erdees.netgurushoppinglist.model.ShoppingList
 import com.erdees.netgurushoppinglist.model.database.Converter
 
 @Dao
-interface ShoppingListDao {
+interface ShoppingListsDao {
 
     @Query("SELECT * FROM SHOPPING_LIST WHERE isActive = 1 ORDER BY timeStamp ASC")
     fun getActiveShoppingLists() : LiveData<List<ShoppingList>>

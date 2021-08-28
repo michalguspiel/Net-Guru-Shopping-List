@@ -5,38 +5,15 @@ import androidx.room.*
 import com.erdees.netgurushoppinglist.model.GroceryItem
 import com.erdees.netgurushoppinglist.model.ShoppingList
 import com.erdees.netgurushoppinglist.model.dao.GroceryItemDao
-import com.erdees.netgurushoppinglist.model.dao.ShoppingListDao
+import com.erdees.netgurushoppinglist.model.dao.ShoppingListsDao
 
 @Database(entities = [(ShoppingList::class),(GroceryItem::class)], version = 1)
 @TypeConverters(Converter::class)
 abstract class LocalDatabase : RoomDatabase() {
 
-    abstract fun shoppingListDao(): ShoppingListDao
+    abstract fun shoppingListDao(): ShoppingListsDao
 
     abstract fun groceryItemDao() : GroceryItemDao
-
-
-    companion object {
-        @Volatile
-        private var INSTANCE: LocalDatabase? = null
-
-        fun getDatabase(context: Context): LocalDatabase {
-            val tempInstance = INSTANCE
-            if (tempInstance != null) {
-                return tempInstance
-            }
-            synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    LocalDatabase::class.java,
-                    "local_database"
-                )
-                    .build()
-                INSTANCE = instance
-                return instance
-            }
-        }
-    }
 
 
 }

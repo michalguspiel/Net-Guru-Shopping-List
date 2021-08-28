@@ -1,10 +1,7 @@
 package com.erdees.netgurushoppinglist.model.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.erdees.netgurushoppinglist.model.GroceryItem
 
 
@@ -16,5 +13,8 @@ interface GroceryItemDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertGroceryItem(groceryItem: GroceryItem)
+
+    @Delete
+    fun deleteGroceryItem(groceryItem: GroceryItem)
 
 }

@@ -1,19 +1,21 @@
 package com.erdees.netgurushoppinglist.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import com.erdees.netgurushoppinglist.model.database.LocalDatabase
-import com.erdees.netgurushoppinglist.model.repository.ShoppingListRepository
+import androidx.lifecycle.ViewModel
+import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
+import com.erdees.netgurushoppinglist.model.repositories.ShoppingListRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ArchivedShoppingListsFragmentViewModel(application: Application) : AndroidViewModel(application) {
-
-    var shoppingListRepository: ShoppingListRepository
-
-    init {
-        val shoppingListDao = LocalDatabase.getDatabase(application).shoppingListDao()
-        shoppingListRepository = ShoppingListRepository(shoppingListDao)
-    }
+@HiltViewModel
+class ArchivedShoppingListsFragmentViewModel @Inject constructor(
+    shoppingListRepository: ShoppingListRepository,
+    private val businessLogicRepository: BusinessLogicRepository
+) : ViewModel() {
 
     val getArchivedShoppingLists = shoppingListRepository.getArchivedShoppingLists
+
+    fun setShoppingListToPresent(shoppingListToPresent: ShoppingList) =
+        businessLogicRepository.setShoppingListToPresent(shoppingListToPresent)
 
 }

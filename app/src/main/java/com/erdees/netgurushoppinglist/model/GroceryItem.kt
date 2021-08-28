@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey
 data class GroceryItem(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val name : String,
-    val hostListId: Long
+    val hostListId: Long,
+    val isInBasket : Boolean
 ) {
 }

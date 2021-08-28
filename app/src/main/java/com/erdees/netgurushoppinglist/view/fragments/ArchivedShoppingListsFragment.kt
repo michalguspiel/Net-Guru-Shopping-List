@@ -6,33 +6,42 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erdees.netgurushoppinglist.databinding.ArchivedShoppingListsFragmentBinding
 import com.erdees.netgurushoppinglist.view.recyclerAdapters.ShoppingListsRecyclerAdapter
 import com.erdees.netgurushoppinglist.viewModel.ArchivedShoppingListsFragmentViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class ArchivedShoppingListsFragment : Fragment() {
 
-    private var _binding : ArchivedShoppingListsFragmentBinding? = null
+    private var _binding: ArchivedShoppingListsFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var viewModel : ArchivedShoppingListsFragmentViewModel
+    private lateinit var viewModel: ArchivedShoppingListsFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = ArchivedShoppingListsFragmentBinding.inflate(inflater,container,false)
+        _binding = ArchivedShoppingListsFragmentBinding.inflate(inflater, container, false)
         val view = binding.root
 
         viewModel = ViewModelProvider(this)[ArchivedShoppingListsFragmentViewModel::class.java]
-        binding.shoppingListsRV.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL,false)
-        viewModel.getArchivedShoppingLists.observe(viewLifecycleOwner,{
-
-            binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it,requireActivity())
-
+        with(binding.shoppingListsRV) {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            this.addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    LinearLayoutManager.VERTICAL
+                )
+            )
+        }
+        viewModel.getArchivedShoppingLists.observe(viewLifecycleOwner, {
+            binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it, requireActivity(),parentFragmentManager,viewModel)
         })
 
         return view
