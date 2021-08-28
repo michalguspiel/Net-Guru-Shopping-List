@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardElevation="12dp"
+    android:animateLayoutChanges="true"
     android:id="@+id/itemLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -32,6 +33,29 @@
             android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             tools:text="Groceries"
+            />
+
+        <ImageView
+            android:id="@+id/itemStatusBox"
+            android:layout_width="wrap_content"
+            android:src="@drawable/circle"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="24dp"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/itemStatus"
+            android:src="@drawable/ic_path_1"
+            android:alpha="0"
+            app:layout_constraintStart_toStartOf="@id/itemStatusBox"
+            app:layout_constraintEnd_toEndOf="@id/itemStatusBox"
+            app:layout_constraintTop_toTopOf="@id/itemStatusBox"
+            app:layout_constraintBottom_toBottomOf="@id/itemStatusBox"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

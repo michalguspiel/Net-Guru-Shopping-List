@@ -43,7 +43,7 @@ class SingleShoppingListFragment : Fragment() {
         viewModel.shoppingListToPresent.observe(viewLifecycleOwner,{ shoppingList ->
             if(shoppingList != null) {
                 viewModel.groceriesToPresent(shoppingList.id).observe(viewLifecycleOwner, { listOfGroceryItems ->
-                    binding.shoppingListsRV.adapter = SingleShoppingListRecyclerAdapter(listOfGroceryItems,shoppingList,requireContext())
+                    binding.shoppingListsRV.adapter = SingleShoppingListRecyclerAdapter(listOfGroceryItems,shoppingList,requireContext(),viewModel)
 
                 })
             }
