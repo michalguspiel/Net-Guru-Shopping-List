@@ -12,9 +12,12 @@ interface GroceryItemDao {
     fun getGroceriesForShoppingList(shoppingListId : Long) : LiveData<List<GroceryItem>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertGroceryItem(groceryItem: GroceryItem)
+    suspend fun insertGroceryItem(groceryItem: GroceryItem)
 
     @Delete
-    fun deleteGroceryItem(groceryItem: GroceryItem)
+    suspend fun deleteGroceryItem(groceryItem: GroceryItem)
+
+    @Update
+    suspend fun editGroceryItem(groceryItem: GroceryItem)
 
 }

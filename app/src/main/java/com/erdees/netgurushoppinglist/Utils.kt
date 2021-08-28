@@ -1,8 +1,10 @@
 package com.erdees.netgurushoppinglist
 
+import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.snackbar.Snackbar
 
 object Utils {
 
@@ -16,7 +18,9 @@ object Utils {
             ft.addToBackStack(backStateName)
             ft.commit()
         }
+    }
 
-
+    fun View.makeSnackbar(message: String){
+        Snackbar.make(this,message,Snackbar.LENGTH_SHORT).show()
     }
 }

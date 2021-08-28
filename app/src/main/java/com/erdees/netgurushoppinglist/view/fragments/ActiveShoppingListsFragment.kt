@@ -50,7 +50,7 @@ class ActiveShoppingListsFragment : Fragment() {
     }
 
     companion object {
-        const val TAG = "ShoppingListFragment"
+        const val TAG = "ActiveShoppingListFragment"
     }
 
     override fun onDestroy() {

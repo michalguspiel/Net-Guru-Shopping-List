@@ -8,7 +8,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.erdees.netgurushoppinglist.R
 import com.erdees.netgurushoppinglist.Utils
+import com.erdees.netgurushoppinglist.Utils.makeSnackbar
 import com.erdees.netgurushoppinglist.databinding.ActivityMainBinding
+import com.erdees.netgurushoppinglist.model.GroceryItem
 import com.erdees.netgurushoppinglist.model.ShoppingList
 import com.erdees.netgurushoppinglist.view.fragments.ArchivedShoppingListsFragment
 import com.erdees.netgurushoppinglist.view.fragments.ActiveShoppingListsFragment
@@ -33,20 +35,12 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
 
         viewBinding.fab.setOnClickListener {
-            val editText = EditText(this)
-            val alertDialog = AlertDialog.Builder(this)
-                .setView(editText)
-                .setMessage("Add Grocery list")
-                .setNegativeButton("Back", null)
-                .setPositiveButton("Add", null)
-                .show()
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
-                val newShoppingList = ShoppingList(
-                    0, editText.text.toString(), true,
-                    java.util.Calendar.getInstance().time
-                )
-                viewModel.addShoppingList(newShoppingList)
+            if (supportFragmentManager.fragments.last().tag!! == ArchivedShoppingListsFragment.TAG ||
+                supportFragmentManager.fragments.last().tag!! == ActiveShoppingListsFragment.TAG)
+            {buildAlertDialogToAddShoppingList()
             }
+            else buildAlertDialogToAddGroceryItemToShoppingList()
+
         }
 
         viewBinding.bottomNavigation.setOnItemSelectedListener { menuItem ->
@@ -72,14 +66,47 @@ class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-
         Utils.openFragment(
             activeShoppingListsFragment,
             ActiveShoppingListsFragment.TAG,
             supportFragmentManager
         )
+    }
 
+    private fun buildAlertDialogToAddShoppingList(){
+        val editText = EditText(this)
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(editText)
+            .setMessage("Add shopping list")
+            .setNegativeButton("Back", null)
+            .setPositiveButton("Add", null)
+            .show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val newShoppingList = ShoppingList(
+                0, editText.text.toString(), true,
+                java.util.Calendar.getInstance().time
+            )
+            viewModel.addShoppingList(newShoppingList)
+            editText.text.clear()
+            viewBinding.root.makeSnackbar("${newShoppingList.shortDescription} created!")
+        }
+    }
+
+    private fun buildAlertDialogToAddGroceryItemToShoppingList(){
+        val editText = EditText(this)
+        val alertDialog = AlertDialog.Builder(this)
+            .setView(editText)
+            .setMessage("Add grocery item to the list")
+            .setNegativeButton("Back", null)
+            .setPositiveButton("Add", null)
+            .show()
+        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+            val groceryItem = GroceryItem(0,editText.text.toString(),viewModel.presentedShoppingList.value!!.id,false)
+            viewModel.addGroceryItem(groceryItem)
+            editText.text.clear()
+            viewBinding.root.makeSnackbar("${groceryItem.name} added!")
+
+        }
     }
 
     companion object {

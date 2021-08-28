@@ -14,4 +14,6 @@ class ShoppingListRepository
     suspend fun addShoppingList(shoppingList: ShoppingList) =
         shoppingListDao.addShoppingList(shoppingList)
 
+
+
 }

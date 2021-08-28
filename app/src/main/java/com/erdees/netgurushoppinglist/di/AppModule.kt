@@ -3,6 +3,7 @@ package com.erdees.netgurushoppinglist.di
 import android.app.Activity
 import android.content.Context
 import androidx.room.Room
+import com.erdees.netgurushoppinglist.model.dao.GroceryItemDao
 import com.erdees.netgurushoppinglist.model.dao.ShoppingListsDao
 import com.erdees.netgurushoppinglist.model.database.LocalDatabase
 import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
@@ -45,6 +46,12 @@ object AppModule {
     @Provides
     fun provideShoppingListsDao(db : LocalDatabase) : ShoppingListsDao {
         return db.shoppingListDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideGroceryDao (db : LocalDatabase)  : GroceryItemDao {
+        return db.groceryItemDao()
     }
 
     @Singleton
