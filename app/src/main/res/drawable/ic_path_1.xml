@@ -3,5 +3,5 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <path android:fillColor="#00000000"
         android:pathData="M3.07,128.472 L105.5,208.143l178.3,-204.86"
-        android:strokeColor="#1cc850" android:strokeWidth="10"/>
+        android:strokeColor="#1cc850" android:strokeWidth="14"/>
 </vector>

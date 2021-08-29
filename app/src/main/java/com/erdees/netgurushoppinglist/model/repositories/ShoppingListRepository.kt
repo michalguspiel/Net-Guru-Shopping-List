@@ -14,6 +14,9 @@ class ShoppingListRepository
     suspend fun addShoppingList(shoppingList: ShoppingList) =
         shoppingListDao.addShoppingList(shoppingList)
 
+    suspend fun deleteShoppingList(shoppingList: ShoppingList) =
+        shoppingListDao.deleteShoppingList(shoppingList)
 
-
+    suspend fun updateShoppingList(shoppingList: ShoppingList) =
+        shoppingListDao.updateShoppingList(shoppingList)
 }

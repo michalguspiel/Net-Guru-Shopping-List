@@ -8,13 +8,16 @@ import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import com.erdees.netgurushoppinglist.R
 import com.erdees.netgurushoppinglist.Utils
+import com.erdees.netgurushoppinglist.Utils.makeGone
 import com.erdees.netgurushoppinglist.Utils.makeSnackbar
+import com.erdees.netgurushoppinglist.Utils.makeVisible
 import com.erdees.netgurushoppinglist.databinding.ActivityMainBinding
 import com.erdees.netgurushoppinglist.model.GroceryItem
 import com.erdees.netgurushoppinglist.model.ShoppingList
 import com.erdees.netgurushoppinglist.view.fragments.ArchivedShoppingListsFragment
 import com.erdees.netgurushoppinglist.view.fragments.ActiveShoppingListsFragment
 import com.erdees.netgurushoppinglist.viewModel.MainActivityViewModel
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -43,10 +46,14 @@ class MainActivity : AppCompatActivity() {
 
         }
 
+        viewModel.presentedShoppingList.observe(this,{
+            if(it != null) viewBinding.bottomNavigation.uncheckAllItems()
+        })
+
         viewBinding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.activeShoppingList -> {
-                    Log.i(TAG, "active shopping list clicked")
+                    viewBinding.fab.makeVisible()
                     Utils.openFragment(
                         activeShoppingListsFragment,
                         ActiveShoppingListsFragment.TAG,
@@ -54,8 +61,7 @@ class MainActivity : AppCompatActivity() {
                     )
                 }
                 R.id.archivedShoppingList -> {
-                    Log.i(TAG, "archive shopping list clicked")
-
+                    viewBinding.fab.makeGone()
                     Utils.openFragment(
                         archivedShoppingListFragment,
                         ArchivedShoppingListsFragment.TAG,
@@ -73,6 +79,10 @@ class MainActivity : AppCompatActivity() {
         )
     }
 
+
+    /**Two alert dialogs with for adding shopping list and grocery item respectively, few differences with logic
+     * for instance after adding shopping list dialog disappears but after adding grocery item only text field is cleared.
+     * I figured that it would be desired behaviour.*/
     private fun buildAlertDialogToAddShoppingList(){
         val editText = EditText(this)
         val alertDialog = AlertDialog.Builder(this)
@@ -87,7 +97,7 @@ class MainActivity : AppCompatActivity() {
                 java.util.Calendar.getInstance().time
             )
             viewModel.addShoppingList(newShoppingList)
-            editText.text.clear()
+            alertDialog.dismiss()
             viewBinding.root.makeSnackbar("${newShoppingList.shortDescription} created!")
         }
     }
@@ -107,6 +117,32 @@ class MainActivity : AppCompatActivity() {
             viewBinding.root.makeSnackbar("${groceryItem.name} added!")
 
         }
+    }
+
+    override fun onBackPressed() {
+        if(supportFragmentManager.backStackEntryCount == 1) finish()
+        else super.onBackPressed()
+
+        when (supportFragmentManager.fragments.last().tag) {
+            ActiveShoppingListsFragment.TAG -> {
+                viewBinding.fab.makeVisible()
+                viewBinding.bottomNavigation.selectedItemId = R.id.activeShoppingList
+            }
+            ArchivedShoppingListsFragment.TAG -> {
+                viewBinding.fab.makeGone()
+                viewBinding.bottomNavigation.selectedItemId = R.id.archivedShoppingList
+            }
+            else -> viewBinding.bottomNavigation.uncheckAllItems()
+            }
+
+    }
+
+    private fun BottomNavigationView.uncheckAllItems() {
+        menu.setGroupCheckable(0, true, false)
+        for (i in 0 until menu.size()) {
+            menu.getItem(i).isChecked = false
+        }
+        menu.setGroupCheckable(0, true, true)
     }
 
     companion object {

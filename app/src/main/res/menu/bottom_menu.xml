@@ -4,14 +4,14 @@
 
     <item
         android:id="@+id/activeShoppingList"
-        android:title="Shopping Lists"
+        android:title="@string/shopping_lists"
         android:icon="@drawable/ic_baseline_shopping_cart_24">
 
     </item>
 
     <item
         android:id="@+id/archivedShoppingList"
-        android:title="Archived Shopping Lists"
-        android:icon="@drawable/ic_baseline_archive_24"></item>
+        android:title="@string/archived_shopping_lists"
+        android:icon="@drawable/ic_baseline_archive_24" />
 
 </menu>

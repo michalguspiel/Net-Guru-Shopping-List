@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">NetGuru Shopping List</string>
     <string name="add_groceries">Add shopping list></string>
+    <string name="archive">Archive</string>
+    <string name="delete">Delete</string>
+    <string name="archived_shopping_lists">Archived Shopping Lists</string>
+    <string name="shopping_lists">Shopping Lists</string>
 </resources>

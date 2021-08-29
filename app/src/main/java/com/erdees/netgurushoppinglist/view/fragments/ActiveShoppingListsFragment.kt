@@ -43,7 +43,7 @@ class ActiveShoppingListsFragment : Fragment() {
         }
 
         viewModel.getActiveShoppingLists.observe(viewLifecycleOwner, {
-            binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it, requireActivity(),parentFragmentManager,viewModel)
+            binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it, requireContext(),parentFragmentManager,viewModel)
         })
 
         return view
