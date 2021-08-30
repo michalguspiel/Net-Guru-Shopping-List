@@ -1,10 +1,8 @@
 package com.erdees.netgurushoppinglist.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdees.netgurushoppinglist.model.GroceryItem
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.GroceryItem
 import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
 import com.erdees.netgurushoppinglist.model.repositories.GroceryItemRepository
 import com.erdees.netgurushoppinglist.model.repositories.ShoppingListRepository
@@ -15,16 +13,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SingleShoppingListFragmentViewModel @Inject constructor(
-    private val shoppingListRepository: ShoppingListRepository,
     private val groceryItemRepository: GroceryItemRepository,
     private val businessLogicRepository: BusinessLogicRepository
 ) : ViewModel() {
 
     val shoppingListToPresent = businessLogicRepository.getShoppingListToPresent()
 
+    fun addGroceryItem(groceryItem: GroceryItem) {
+        viewModelScope.launch(Dispatchers.IO) {
+            groceryItemRepository.insertGroceryItem(groceryItem)
+        }
+    }
+
     fun groceriesToPresent(id: Long) = groceryItemRepository.getGroceriesForShoppingList(id)
 
-    fun clearShoppingListToPresent() = businessLogicRepository.clearShoppingListToPresent()
 
     fun deleteGroceryItem(groceryItem: GroceryItem) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -38,12 +40,19 @@ class SingleShoppingListFragmentViewModel @Inject constructor(
         }
     }
 
-    fun changeGroceryItemStatus(groceryItem: GroceryItem) {
-        val updatedItem : GroceryItem = if(groceryItem.isInBasket) {
-            GroceryItem(groceryItem.id,groceryItem.name,groceryItem.hostListId,false)
+    fun changeGroceryItemStatus(groceryItem: GroceryItem) : Boolean{
+        val result : Boolean
+        val updatedItem : GroceryItem
+         if(groceryItem.isInBasket) {
+           updatedItem = GroceryItem(groceryItem.id,groceryItem.name,groceryItem.quantity,groceryItem.hostListId,false)
+             result = false
         }
-        else GroceryItem(groceryItem.id,groceryItem.name,groceryItem.hostListId,true)
+        else {
+            updatedItem = GroceryItem(groceryItem.id,groceryItem.name,groceryItem.quantity,groceryItem.hostListId,true)
+             result = true
+         }
         editGroceryItem(updatedItem)
+        return result
     }
 
 }

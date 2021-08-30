@@ -17,7 +17,8 @@
 
             <ImageView
                 android:id="@+id/icon"
-                android:src="@drawable/ic_baseline_shopping_cart_24"
+                android:src="@drawable/ic_baseline_shopping_basket_24"
+                app:tint="@color/blue_700"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:layout_marginStart="24dp"
@@ -26,7 +27,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <TextView
-                android:id="@+id/itemName"
+                android:id="@+id/groceryItemName"
                 android:layout_width="wrap_content"
                 android:textSize="14sp"
                 android:layout_height="wrap_content"

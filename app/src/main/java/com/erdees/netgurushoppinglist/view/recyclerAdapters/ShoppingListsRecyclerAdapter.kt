@@ -1,6 +1,7 @@
 package com.erdees.netgurushoppinglist.view.recyclerAdapters
 
 import android.content.Context
+import android.text.format.DateFormat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,7 +10,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import com.erdees.netgurushoppinglist.databinding.ArchivedShoppingListItemBinding
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.Constants.ACTIVE_SHOPPING_LIST_TYPE
 import com.erdees.netgurushoppinglist.Constants.ARCHIVED_SHOPPING_LIST_TYPE
 import com.erdees.netgurushoppinglist.R
@@ -36,8 +37,14 @@ class ShoppingListsRecyclerAdapter(
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun bind(position: Int) {
-            viewBinding.itemName.text = list[position].shortDescription
-            viewBinding.itemLayout.setOnClickListener {
+            viewBinding.shoppingListName.text = list[position].name
+            viewBinding.shoppingListCreationDate.text = context.getString(R.string.list_created,DateFormat.format(
+                "dd-MM-yy", list[position].creationDate
+            ))
+            if(list[position].archivingDate != null)viewBinding.shoppingListArchivingDate.text = context.getString(R.string.list_archived,DateFormat.format(
+                "dd-MM-yy", list[position].archivingDate
+            ))
+            viewBinding.shoppingListItemLayout.setOnClickListener {
                 (viewModel as ArchivedShoppingListsFragmentViewModel).setShoppingListToPresent(list[position])
                 Utils.openFragment(singleShoppingListFragment, SingleShoppingListFragment.TAG, fm)
                 singleShoppingListFragment
@@ -50,12 +57,15 @@ class ShoppingListsRecyclerAdapter(
 
         fun bind(position: Int) {
             val viewModel = (viewModel as ActiveShoppingListsFragmentViewModel)
-            viewBinding.itemName.text = list[position].shortDescription
-            viewBinding.itemLayout.setOnClickListener {
+            viewBinding.shoppingListName.text = list[position].name
+            viewBinding.shoppingListCreationDate.text = context.getString(R.string.list_created,DateFormat.format(
+                "dd-MM-yy", list[position].creationDate
+            ))
+            viewBinding.shoppingListItemLayout.setOnClickListener {
                 viewModel.setShoppingListToPresent(list[position])
                 Utils.openFragment(singleShoppingListFragment, SingleShoppingListFragment.TAG, fm)
             }
-            viewBinding.itemLayout.createPopUpMenuOnLongClick(position, viewBinding)
+            viewBinding.shoppingListItemLayout.createPopUpMenuOnLongClick(position, viewBinding)
         }
     }
 
@@ -102,7 +112,7 @@ class ShoppingListsRecyclerAdapter(
     fun View.createPopUpMenuOnLongClick(position: Int, viewBinding : ActiveShoppingListsItemBinding) {
         val viewModel = (viewModel as ActiveShoppingListsFragmentViewModel)
         this.setOnLongClickListener {
-            val popupMenu = PopupMenu(context, viewBinding.itemLayout)
+            val popupMenu = PopupMenu(context, viewBinding.shoppingListPopUpMenuAnchor)
             popupMenu.menuInflater.inflate(
                 R.menu.active_shopping_list_context_menu,
                 popupMenu.menu

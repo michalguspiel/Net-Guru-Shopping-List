@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardElevation="12dp"
-    android:id="@+id/itemLayout"
+    android:id="@+id/shoppingListItemLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,8 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:src="@drawable/ic_baseline_archive_24"
+            android:src="@drawable/ic_baseline_history_24"
+            app:tint="@color/blue_700"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="24dp"
@@ -22,17 +23,47 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/itemName"
+        <LinearLayout
+            android:id="@+id/shoppingListDetailsLayout"
             android:layout_width="wrap_content"
-            android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="start"
+            android:layout_marginStart="20dp"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Groceries"
-            />
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/shoppingListName"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:maxWidth="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                tools:text="Groceries"
+                />
+
+            <TextView
+                android:id="@+id/shoppingListCreationDate"
+                android:layout_width="wrap_content"
+                android:textSize="12sp"
+                android:layout_height="wrap_content"
+                tools:text="List created 22.05.21"
+                />
+        </LinearLayout>
+
+
+        <TextView
+            android:id="@+id/shoppingListArchivingDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            tools:text="List archived 23.05.21"
+            app:layout_constraintStart_toEndOf="@id/shoppingListDetailsLayout"
+            app:layout_constraintBottom_toBottomOf="@id/shoppingListDetailsLayout"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

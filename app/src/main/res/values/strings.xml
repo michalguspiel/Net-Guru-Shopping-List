@@ -5,4 +5,6 @@
     <string name="delete">Delete</string>
     <string name="archived_shopping_lists">Archived Shopping Lists</string>
     <string name="shopping_lists">Shopping Lists</string>
+    <string name="list_created">List created %1$s</string>
+    <string name="list_archived">Groceries done %1$s</string>
 </resources>

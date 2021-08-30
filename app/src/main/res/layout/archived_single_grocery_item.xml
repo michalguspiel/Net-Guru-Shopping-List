@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     app:cardElevation="12dp"
-    android:id="@+id/itemLayout"
+    android:id="@+id/groceryItemLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -14,7 +14,8 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:src="@drawable/ic_baseline_shopping_cart_24"
+            android:src="@drawable/ic_baseline_shopping_basket_24"
+            app:tint="@color/blue_200"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="24dp"
@@ -22,17 +23,34 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/itemName"
+        <LinearLayout
+            android:id="@+id/groceryItemDetailsLayout"
             android:layout_width="wrap_content"
-            android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            tools:text="Groceries"
-            />
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <TextView
+                android:id="@+id/groceryItemName"
+                android:layout_width="wrap_content"
+                android:textSize="16sp"
+                android:maxWidth="300dp"
+                android:layout_height="wrap_content"
+                tools:text="Groceriesdaspåodjaspiofhasoipfhasiofhasiofhsaoisha"
+                android:layout_marginBottom="4dp"
+                />
+
+            <TextView
+                android:id="@+id/groceryItemQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                tools:text="1.2kg"/>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,6 +1,7 @@
 package com.erdees.netgurushoppinglist.view.recyclerAdapters
 
 import android.animation.Animator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,38 +10,53 @@ import android.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.erdees.netgurushoppinglist.Constants
 import com.erdees.netgurushoppinglist.R
-import com.erdees.netgurushoppinglist.databinding.ActiveSingleShoppingListItemBinding
-import com.erdees.netgurushoppinglist.databinding.ArchivedSingleShoppingListItemBinding
-import com.erdees.netgurushoppinglist.model.GroceryItem
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.databinding.ActiveSingleGroceryItemBinding
+import com.erdees.netgurushoppinglist.databinding.ArchivedSingleGroceryItemBinding
+import com.erdees.netgurushoppinglist.model.models.GroceryItem
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.viewModel.SingleShoppingListFragmentViewModel
 import java.lang.NullPointerException
 
 class SingleShoppingListRecyclerAdapter(
-    val list: List<GroceryItem>,
-    val shoppingList: ShoppingList,
     val context: Context,
     val viewModel: SingleShoppingListFragmentViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    inner class ActiveListViewHolder(private val viewBinding: ActiveSingleShoppingListItemBinding) :
+    var list : MutableList<GroceryItem> = mutableListOf()
+    var shoppingList : ShoppingList? = null
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateShoppingList(updatedShoppingList: ShoppingList){
+        shoppingList = updatedShoppingList
+        notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateGroceryList(listOfGroceries : MutableList<GroceryItem>){
+        list = listOfGroceries
+        notifyDataSetChanged()
+    }
+
+    inner class ActiveListViewHolder(private val viewBinding: ActiveSingleGroceryItemBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(position: Int) {
-            if (list[position].isInBasket) viewBinding.itemStatus.alpha =
-                1.0f else viewBinding.itemStatus.alpha = 0.0f
-            viewBinding.itemName.text = list[position].name
-            viewBinding.itemLayout.createPopUpMenuOnLongClick(position, viewBinding)
-            viewBinding.itemStatusBox.setOnClickListener {
-                viewBinding.itemStatus.animateAndChangeItemStatus(position)
+            if (list[position].isInBasket) viewBinding.groceryItemStatus.alpha =
+                1.0f else viewBinding.groceryItemStatus.alpha = 0.0f
+            viewBinding.groceryItemName.text = list[position].name
+            viewBinding.groceryItemQuantity.text = list[position].quantity
+            viewBinding.groceryItemLayout.createPopUpMenuOnLongClick(position, viewBinding)
+            viewBinding.groceryItemStatusBox.setOnClickListener {
+                viewBinding.groceryItemStatus.animateAndChangeItemStatus(position)
             }
         }
     }
 
-    inner class ArchivedListViewHolder(private val viewBinding: ArchivedSingleShoppingListItemBinding) :
+    inner class ArchivedListViewHolder(private val viewBinding: ArchivedSingleGroceryItemBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
         fun bind(position: Int) {
-            viewBinding.itemName.text = list[position].name
+            viewBinding.groceryItemName.text = list[position].name
+            viewBinding.groceryItemQuantity.text = list[position].quantity
         }
     }
 
@@ -48,7 +64,7 @@ class SingleShoppingListRecyclerAdapter(
         return when (viewType) {
             Constants.ACTIVE_SHOPPING_LIST_TYPE -> {
                 ActiveListViewHolder(
-                    ActiveSingleShoppingListItemBinding.inflate(
+                    ActiveSingleGroceryItemBinding.inflate(
                         LayoutInflater.from(
                             context
                         ), parent, false
@@ -57,7 +73,7 @@ class SingleShoppingListRecyclerAdapter(
             }
             Constants.ARCHIVED_SHOPPING_LIST_TYPE -> {
                 ArchivedListViewHolder(
-                    ArchivedSingleShoppingListItemBinding.inflate(
+                    ArchivedSingleGroceryItemBinding.inflate(
                         LayoutInflater.from(context), parent, false
                     )
                 )
@@ -69,7 +85,7 @@ class SingleShoppingListRecyclerAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (shoppingList.isActive) {
+        return when (shoppingList?.isActive) {
             true -> Constants.ACTIVE_SHOPPING_LIST_TYPE
             else -> Constants.ARCHIVED_SHOPPING_LIST_TYPE
         }
@@ -93,10 +109,10 @@ class SingleShoppingListRecyclerAdapter(
 
     fun View.createPopUpMenuOnLongClick(
         position: Int,
-        viewBinding: ActiveSingleShoppingListItemBinding
+        viewBinding: ActiveSingleGroceryItemBinding
     ) {
         this.setOnLongClickListener {
-            val popupMenu = PopupMenu(context, viewBinding.itemStatus)
+            val popupMenu = PopupMenu(context, viewBinding.groceryItemStatus)
             popupMenu.menuInflater.inflate(
                 R.menu.single_grocery_item_context_menu,
                 popupMenu.menu
@@ -127,7 +143,8 @@ class SingleShoppingListRecyclerAdapter(
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
-                    viewModel.changeGroceryItemStatus(list[position])
+                     viewModel.changeGroceryItemStatus(list[position])
+                    this@SingleShoppingListRecyclerAdapter.notifyItemChanged(position)
                 }
 
                 override fun onAnimationCancel(animation: Animator?) {

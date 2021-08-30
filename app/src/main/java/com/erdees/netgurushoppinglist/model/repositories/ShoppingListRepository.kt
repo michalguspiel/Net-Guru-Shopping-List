@@ -1,6 +1,6 @@
 package com.erdees.netgurushoppinglist.model.repositories
 
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.model.dao.ShoppingListsDao
 import javax.inject.Inject
 

@@ -38,7 +38,7 @@ object AppModule {
     fun provideDatabase(@ApplicationContext app : Context ) = Room.databaseBuilder(
             app,
             LocalDatabase::class.java,
-            "your_db_name"
+            "database"
         ).build()
 
 

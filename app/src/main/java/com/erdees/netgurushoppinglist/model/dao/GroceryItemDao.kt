@@ -2,7 +2,7 @@ package com.erdees.netgurushoppinglist.model.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.erdees.netgurushoppinglist.model.GroceryItem
+import com.erdees.netgurushoppinglist.model.models.GroceryItem
 
 
 @Dao

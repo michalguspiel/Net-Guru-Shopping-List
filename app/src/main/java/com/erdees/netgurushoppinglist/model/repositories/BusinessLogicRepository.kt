@@ -2,7 +2,7 @@ package com.erdees.netgurushoppinglist.model.repositories
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 
 
 

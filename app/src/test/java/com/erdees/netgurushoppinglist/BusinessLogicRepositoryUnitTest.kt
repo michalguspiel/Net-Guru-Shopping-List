@@ -1,7 +1,7 @@
 package com.erdees.netgurushoppinglist
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
 import junit.framework.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
@@ -10,6 +10,7 @@ import org.junit.Test
 import org.junit.Rule
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.*
 
 
 @RunWith(JUnit4::class)
@@ -23,8 +24,8 @@ class BusinessLogicRepositoryUnitTest {
     @Before
     fun setup(){
         businessLogicRepository = BusinessLogicRepository()
-        testShoppingList =  ShoppingList(1,"TEST LIST",true, java.util.Calendar.getInstance().time )
-        secondTestShoppingList =  ShoppingList(2,"TEST LIST 2",true, java.util.Calendar.getInstance().time )
+        testShoppingList =  ShoppingList(1,"TEST LIST",true, Calendar.getInstance().time )
+        secondTestShoppingList =  ShoppingList(2,"TEST LIST 2",true, Calendar.getInstance().time )
     }
 
     @Rule

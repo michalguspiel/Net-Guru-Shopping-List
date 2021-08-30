@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     app:cardElevation="12dp"
     android:animateLayoutChanges="true"
-    android:id="@+id/itemLayout"
+    android:id="@+id/groceryItemLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,7 +15,8 @@
 
         <ImageView
             android:id="@+id/icon"
-            android:src="@drawable/ic_baseline_shopping_cart_24"
+            android:src="@drawable/ic_baseline_shopping_basket_24"
+            app:tint="@color/blue_200"
             android:layout_width="32dp"
             android:layout_height="32dp"
             android:layout_marginStart="24dp"
@@ -23,20 +24,37 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
 
-        <TextView
-            android:id="@+id/itemName"
+        <LinearLayout
+            android:id="@+id/groceryItemDetailsLayout"
             android:layout_width="wrap_content"
-            android:textSize="14sp"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintStart_toEndOf="@id/icon"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="20dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <TextView
+            android:id="@+id/groceryItemName"
+            android:layout_width="wrap_content"
+            android:maxWidth="250dp"
+            android:textSize="16sp"
+            android:layout_height="wrap_content"
             tools:text="Groceries"
+            android:layout_marginBottom="4dp"
             />
 
+            <TextView
+                android:id="@+id/groceryItemQuantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                tools:text="1.2kg"/>
+
+        </LinearLayout>
+
         <ImageView
-            android:id="@+id/itemStatusBox"
+            android:id="@+id/groceryItemStatusBox"
             android:layout_width="wrap_content"
             android:src="@drawable/circle"
             android:layout_height="wrap_content"
@@ -49,12 +67,12 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/itemStatus"
+            android:id="@+id/groceryItemStatus"
             android:src="@drawable/ic_baseline_done_24"
-            app:layout_constraintStart_toStartOf="@id/itemStatusBox"
-            app:layout_constraintEnd_toEndOf="@id/itemStatusBox"
-            app:layout_constraintTop_toTopOf="@id/itemStatusBox"
-            app:layout_constraintBottom_toBottomOf="@id/itemStatusBox"
+            app:layout_constraintStart_toStartOf="@id/groceryItemStatusBox"
+            app:layout_constraintEnd_toEndOf="@id/groceryItemStatusBox"
+            app:layout_constraintTop_toTopOf="@id/groceryItemStatusBox"
+            app:layout_constraintBottom_toBottomOf="@id/groceryItemStatusBox"
             />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

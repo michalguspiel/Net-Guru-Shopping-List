@@ -2,8 +2,8 @@ package com.erdees.netgurushoppinglist.viewModel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.erdees.netgurushoppinglist.model.GroceryItem
-import com.erdees.netgurushoppinglist.model.ShoppingList
+import com.erdees.netgurushoppinglist.model.models.GroceryItem
+import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
 import com.erdees.netgurushoppinglist.model.repositories.GroceryItemRepository
 import com.erdees.netgurushoppinglist.model.repositories.ShoppingListRepository
@@ -14,23 +14,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
-    private val shoppingListRepository: ShoppingListRepository,
-    private val businessLogicRepository: BusinessLogicRepository,
-    private val groceryItemRepository: GroceryItemRepository
+    businessLogicRepository: BusinessLogicRepository,
 ) : ViewModel() {
 
-    fun addShoppingList(shoppingList: ShoppingList) {
-        viewModelScope.launch(Dispatchers.IO) {
-            shoppingListRepository.addShoppingList(shoppingList)
-        }
-    }
-
     val presentedShoppingList = businessLogicRepository.getShoppingListToPresent()
-
-    fun addGroceryItem(groceryItem: GroceryItem) {
-        viewModelScope.launch(Dispatchers.IO) {
-            groceryItemRepository.insertGroceryItem(groceryItem)
-        }
-    }
 
 }

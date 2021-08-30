@@ -43,10 +43,8 @@ class ArchivedShoppingListsFragment : Fragment() {
         viewModel.getArchivedShoppingLists.observe(viewLifecycleOwner, {
             binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it, requireContext(),parentFragmentManager,viewModel)
         })
-
         return view
     }
-
 
     companion object {
         const val TAG = "ArchivedShoppingListFragment"
