@@ -1,7 +1,6 @@
 package com.erdees.netgurushoppinglist.view.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.erdees.netgurushoppinglist.Utils.makeGone
 import com.erdees.netgurushoppinglist.Utils.makeSnackbar
+import com.erdees.netgurushoppinglist.Utils.makeVisible
 import com.erdees.netgurushoppinglist.databinding.AddItemAlertDialogBinding
 import com.erdees.netgurushoppinglist.databinding.SingleShoppingListFragmentBinding
 import com.erdees.netgurushoppinglist.model.models.GroceryItem
@@ -52,11 +53,12 @@ class SingleShoppingListFragment : Fragment() {
             )
         }
         viewModel.shoppingListToPresent.observe(viewLifecycleOwner,{ shoppingList ->
-            if(shoppingList != null) {
-                rvAdapter.updateShoppingList(shoppingList)
-                viewModel.groceriesToPresent(shoppingList.id).observe(viewLifecycleOwner, { listOfGroceryItems ->
-                    rvAdapter.updateGroceryList(listOfGroceryItems.toMutableList())
-                })
+            if (shoppingList != null) {
+                if(!shoppingList.isActive) binding.fab.makeGone() else binding.fab.makeVisible()
+                    rvAdapter.updateShoppingList(shoppingList)
+                    viewModel.getGroceriesToPresent(shoppingList.id).observe(viewLifecycleOwner, { listOfGroceryItems ->
+                        rvAdapter.updateGroceryList(listOfGroceryItems.toMutableList())
+                    })
             }
         })
 

@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SingleShoppingListFragmentViewModel @Inject constructor(
     private val groceryItemRepository: GroceryItemRepository,
-    private val businessLogicRepository: BusinessLogicRepository
+    businessLogicRepository: BusinessLogicRepository
 ) : ViewModel() {
 
     val shoppingListToPresent = businessLogicRepository.getShoppingListToPresent()
@@ -25,7 +25,7 @@ class SingleShoppingListFragmentViewModel @Inject constructor(
         }
     }
 
-    fun groceriesToPresent(id: Long) = groceryItemRepository.getGroceriesForShoppingList(id)
+    fun getGroceriesToPresent(id: Long) = groceryItemRepository.getGroceriesForShoppingList(id)
 
 
     fun deleteGroceryItem(groceryItem: GroceryItem) {
