@@ -20,8 +20,8 @@ object Utils {
         }
     }
 
-    fun View.makeSnackbar(message: String){
-        Snackbar.make(this,message,Snackbar.LENGTH_SHORT).show()
+    fun View.makeSnackBar(message: String) {
+        Snackbar.make(this, message, Snackbar.LENGTH_SHORT).show()
     }
 
     fun View.makeGone() {
@@ -31,5 +31,6 @@ object Utils {
     fun View.makeVisible() {
         this.visibility = View.VISIBLE
     }
+
 
 }

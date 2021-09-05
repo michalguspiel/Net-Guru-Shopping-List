@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_gravity="center"
-    android:paddingHorizontal="20dp"
+    android:paddingHorizontal="@dimen/padding_extra_large"
     android:gravity="center"
     android:layout_height="match_parent">
 
@@ -12,11 +12,13 @@
         android:id="@+id/alertDialogTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="@dimen/text_size_extra_large"
+        style="@style/simple_text_view"
         tools:text="Add shopping list"/>
 
     <com.google.android.material.textfield.TextInputLayout
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:hint="Item name"
+        android:hint="@string/item_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -31,8 +33,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_marginTop="6dp"
-            android:hint="Quantity"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:hint="@string/quantity"
             >
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
@@ -44,7 +46,5 @@
         </com.google.android.material.textfield.TextInputLayout>
 
     </com.google.android.material.textfield.TextInputLayout>
-
-
 
 </LinearLayout>

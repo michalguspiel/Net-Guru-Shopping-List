@@ -3,11 +3,12 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
-
+    id 'kotlin-parcelize'
 }
 
 android {
     compileSdk 30
+
 
     defaultConfig {
         applicationId "com.erdees.netgurushoppinglist"
@@ -80,5 +81,6 @@ dependencies {
     androidTestImplementation "com.google.truth:truth:1.0.1"
     androidTestImplementation "android.arch.core:core-testing:1.1.1"
     androidTestImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:1.2.1"
+
 
 }

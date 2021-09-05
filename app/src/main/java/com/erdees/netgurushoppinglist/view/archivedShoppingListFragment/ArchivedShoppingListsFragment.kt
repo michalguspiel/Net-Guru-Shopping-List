@@ -1,4 +1,4 @@
-package com.erdees.netgurushoppinglist.view.fragments
+package com.erdees.netgurushoppinglist.view.archivedShoppingListFragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.erdees.netgurushoppinglist.databinding.ArchivedShoppingListsFragmentBinding
 import com.erdees.netgurushoppinglist.view.recyclerAdapters.ShoppingListsRecyclerAdapter
-import com.erdees.netgurushoppinglist.viewModel.ArchivedShoppingListsFragmentViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,6 +19,7 @@ class ArchivedShoppingListsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ArchivedShoppingListsFragmentViewModel
+    private lateinit var rvAdapter : ShoppingListsRecyclerAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,7 +30,9 @@ class ArchivedShoppingListsFragment : Fragment() {
         val view = binding.root
 
         viewModel = ViewModelProvider(this)[ArchivedShoppingListsFragmentViewModel::class.java]
+        rvAdapter = ShoppingListsRecyclerAdapter(requireActivity(),parentFragmentManager,viewModel)
         with(binding.shoppingListsRV) {
+            adapter = rvAdapter
             layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
             this.addItemDecoration(
@@ -41,7 +43,7 @@ class ArchivedShoppingListsFragment : Fragment() {
             )
         }
         viewModel.getArchivedShoppingLists.observe(viewLifecycleOwner, {
-            binding.shoppingListsRV.adapter = ShoppingListsRecyclerAdapter(it, requireContext(),parentFragmentManager,viewModel)
+            rvAdapter.updateShoppingList(it)
         })
         return view
     }

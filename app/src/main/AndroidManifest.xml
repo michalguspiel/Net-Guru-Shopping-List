@@ -11,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.NetGuruShoppingList">
         <activity
-            android:name=".view.activities.MainActivity"
+            android:name=".view.mainActivity.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

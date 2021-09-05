@@ -1,7 +1,11 @@
 package com.erdees.netgurushoppinglist.view.recyclerAdapters
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.os.Bundle
 import android.text.format.DateFormat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,41 +17,51 @@ import com.erdees.netgurushoppinglist.databinding.ArchivedShoppingListItemBindin
 import com.erdees.netgurushoppinglist.model.models.ShoppingList
 import com.erdees.netgurushoppinglist.Constants.ACTIVE_SHOPPING_LIST_TYPE
 import com.erdees.netgurushoppinglist.Constants.ARCHIVED_SHOPPING_LIST_TYPE
+import com.erdees.netgurushoppinglist.Constants.SHOPPING_LIST_KEY
 import com.erdees.netgurushoppinglist.R
 import com.erdees.netgurushoppinglist.Utils
 import com.erdees.netgurushoppinglist.databinding.ActiveShoppingListsItemBinding
-import com.erdees.netgurushoppinglist.view.fragments.SingleShoppingListFragment
-import com.erdees.netgurushoppinglist.viewModel.ActiveShoppingListsFragmentViewModel
-import com.erdees.netgurushoppinglist.viewModel.ArchivedShoppingListsFragmentViewModel
+import com.erdees.netgurushoppinglist.view.singleShoppingListFragment.SingleShoppingListFragment
+import com.erdees.netgurushoppinglist.view.activeShoppingListFragment.ActiveShoppingListsFragmentViewModel
+import com.erdees.netgurushoppinglist.view.mainActivity.MainActivity
 import java.lang.NullPointerException
 
 class ShoppingListsRecyclerAdapter(
-    private val list: List<ShoppingList>,
-    private val context: Context,
+    private val activity: Activity,
     private val fm: FragmentManager,
     private val viewModel: ViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val singleShoppingListFragment by lazy {
-        SingleShoppingListFragment()
+    var list : MutableList<ShoppingList> = mutableListOf()
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun updateShoppingList(updatedListOfShoppingLists: List<ShoppingList>) {
+        list = updatedListOfShoppingLists.toMutableList()
+        notifyDataSetChanged()
     }
+
+    val singleShoppingListFragment = (activity as MainActivity).singleShoppingListFragment
 
     inner class ArchivedItemViewHolder(private val viewBinding: ArchivedShoppingListItemBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun bind(position: Int) {
             viewBinding.shoppingListName.text = list[position].name
-            viewBinding.shoppingListCreationDate.text = context.getString(R.string.list_created,DateFormat.format(
-                "dd-MM-yy", list[position].creationDate
-            ))
-            if(list[position].archivingDate != null)viewBinding.shoppingListArchivingDate.text = context.getString(R.string.list_archived,DateFormat.format(
-                "dd-MM-yy", list[position].archivingDate
-            ))
+            viewBinding.shoppingListCreationDate.text = activity.getString(
+                R.string.list_created, DateFormat.format(
+                    "dd-MM-yy", list[position].creationDate
+                )
+            )
+            if (list[position].archivingDate != null) viewBinding.shoppingListArchivingDate.text =
+                activity.getString(
+                    R.string.list_archived, DateFormat.format(
+                        "dd-MM-yy", list[position].archivingDate
+                    )
+                )
             viewBinding.shoppingListItemLayout.setOnClickListener {
-                (viewModel as ArchivedShoppingListsFragmentViewModel).setShoppingListToPresent(list[position])
+                singleShoppingListFragment.passShoppingListAsArgument(list[position])
                 Utils.openFragment(singleShoppingListFragment, SingleShoppingListFragment.TAG, fm)
-                singleShoppingListFragment
             }
         }
     }
@@ -56,34 +70,42 @@ class ShoppingListsRecyclerAdapter(
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun bind(position: Int) {
-            val viewModel = (viewModel as ActiveShoppingListsFragmentViewModel)
             viewBinding.shoppingListName.text = list[position].name
-            viewBinding.shoppingListCreationDate.text = context.getString(R.string.list_created,DateFormat.format(
-                "dd-MM-yy", list[position].creationDate
-            ))
+            viewBinding.shoppingListCreationDate.text = activity.getString(
+                R.string.list_created, DateFormat.format(
+                    "dd-MM-yy", list[position].creationDate
+                )
+            )
             viewBinding.shoppingListItemLayout.setOnClickListener {
-                viewModel.setShoppingListToPresent(list[position])
+                singleShoppingListFragment.passShoppingListAsArgument(list[position])
                 Utils.openFragment(singleShoppingListFragment, SingleShoppingListFragment.TAG, fm)
             }
             viewBinding.shoppingListItemLayout.createPopUpMenuOnLongClick(position, viewBinding)
         }
     }
 
+    private fun SingleShoppingListFragment.passShoppingListAsArgument(shoppingList: ShoppingList){
+        val arguments = Bundle()
+        arguments.putParcelable(SHOPPING_LIST_KEY,shoppingList)
+        this.arguments = arguments
+        Log.i(TAG,this.arguments.toString())
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             ACTIVE_SHOPPING_LIST_TYPE -> ActiveItemViewHolder(
                 ActiveShoppingListsItemBinding.inflate(
-                    LayoutInflater.from(context), parent, false
+                    LayoutInflater.from(activity), parent, false
                 )
             )
             ARCHIVED_SHOPPING_LIST_TYPE -> ArchivedItemViewHolder(
                 ArchivedShoppingListItemBinding.inflate(
-                    LayoutInflater.from(context),
+                    LayoutInflater.from(activity),
                     parent,
                     false
                 )
             )
-            else -> throw NullPointerException("ERROR, WRONG VIEW TYPE!")
+            else -> throw NullPointerException(activity.getString(R.string.wrong_type))
         }
 
     }
@@ -102,14 +124,17 @@ class ShoppingListsRecyclerAdapter(
         else if (holder.itemViewType == ARCHIVED_SHOPPING_LIST_TYPE) (holder as ShoppingListsRecyclerAdapter.ArchivedItemViewHolder).bind(
             position
         )
-        else throw NullPointerException("WRONG TYPE !!!")
+        else throw NullPointerException(activity.getString(R.string.wrong_type))
     }
 
     override fun getItemCount(): Int {
         return list.size
     }
 
-    fun View.createPopUpMenuOnLongClick(position: Int, viewBinding : ActiveShoppingListsItemBinding) {
+    fun View.createPopUpMenuOnLongClick(
+        position: Int,
+        viewBinding: ActiveShoppingListsItemBinding
+    ) {
         val viewModel = (viewModel as ActiveShoppingListsFragmentViewModel)
         this.setOnLongClickListener {
             val popupMenu = PopupMenu(context, viewBinding.shoppingListPopUpMenuAnchor)
@@ -138,6 +163,6 @@ class ShoppingListsRecyclerAdapter(
     }
 
     companion object {
-        const val TAG = "ShoppingListsRecyclerAdapter"
+        const val TAG = "ShopListsRVAdapter"
     }
 }

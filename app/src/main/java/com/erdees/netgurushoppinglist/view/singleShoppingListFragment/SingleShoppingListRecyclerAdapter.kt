@@ -1,8 +1,8 @@
-package com.erdees.netgurushoppinglist.view.recyclerAdapters
+package com.erdees.netgurushoppinglist.view.singleShoppingListFragment
 
 import android.animation.Animator
 import android.annotation.SuppressLint
-import android.content.Context
+import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,26 +14,24 @@ import com.erdees.netgurushoppinglist.databinding.ActiveSingleGroceryItemBinding
 import com.erdees.netgurushoppinglist.databinding.ArchivedSingleGroceryItemBinding
 import com.erdees.netgurushoppinglist.model.models.GroceryItem
 import com.erdees.netgurushoppinglist.model.models.ShoppingList
-import com.erdees.netgurushoppinglist.viewModel.SingleShoppingListFragmentViewModel
-import java.lang.NullPointerException
 
 class SingleShoppingListRecyclerAdapter(
-    val context: Context,
+    val activity: Activity,
     val viewModel: SingleShoppingListFragmentViewModel
 ) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    var list : MutableList<GroceryItem> = mutableListOf()
-    var shoppingList : ShoppingList? = null
+    var list: MutableList<GroceryItem> = mutableListOf()
+    var shoppingList: ShoppingList? = null
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateShoppingList(updatedShoppingList: ShoppingList){
+    fun updateShoppingList(updatedShoppingList: ShoppingList) {
         shoppingList = updatedShoppingList
         notifyDataSetChanged()
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateGroceryList(listOfGroceries : MutableList<GroceryItem>){
+    fun updateGroceryList(listOfGroceries: MutableList<GroceryItem>) {
         list = listOfGroceries
         notifyDataSetChanged()
     }
@@ -66,7 +64,7 @@ class SingleShoppingListRecyclerAdapter(
                 ActiveListViewHolder(
                     ActiveSingleGroceryItemBinding.inflate(
                         LayoutInflater.from(
-                            context
+                            activity
                         ), parent, false
                     )
                 )
@@ -74,12 +72,12 @@ class SingleShoppingListRecyclerAdapter(
             Constants.ARCHIVED_SHOPPING_LIST_TYPE -> {
                 ArchivedListViewHolder(
                     ArchivedSingleGroceryItemBinding.inflate(
-                        LayoutInflater.from(context), parent, false
+                        LayoutInflater.from(activity), parent, false
                     )
                 )
             }
             else -> {
-                throw NullPointerException("WRONG TYPE!")
+                throw NullPointerException(activity.getString(R.string.wrong_type))
             }
         }
     }
@@ -94,12 +92,12 @@ class SingleShoppingListRecyclerAdapter(
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder.itemViewType) {
             Constants.ACTIVE_SHOPPING_LIST_TYPE -> {
-                (holder as SingleShoppingListRecyclerAdapter.ActiveListViewHolder).bind(position)
+                (holder as ActiveListViewHolder).bind(position)
             }
             Constants.ARCHIVED_SHOPPING_LIST_TYPE -> {
                 (holder as ArchivedListViewHolder).bind(position)
             }
-            else -> throw NullPointerException("WRONG TYPE !!!")
+            else -> throw NullPointerException(activity.getString(R.string.wrong_type))
         }
     }
 
@@ -143,7 +141,7 @@ class SingleShoppingListRecyclerAdapter(
                 }
 
                 override fun onAnimationEnd(animation: Animator?) {
-                     viewModel.changeGroceryItemStatus(list[position])
+                    viewModel.changeGroceryItemStatus(list[position])
                     this@SingleShoppingListRecyclerAdapter.notifyItemChanged(position)
                 }
 

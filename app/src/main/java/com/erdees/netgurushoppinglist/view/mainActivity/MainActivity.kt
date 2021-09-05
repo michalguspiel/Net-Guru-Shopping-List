@@ -1,49 +1,37 @@
-package com.erdees.netgurushoppinglist.view.activities
+package com.erdees.netgurushoppinglist.view.mainActivity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
+import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
+import com.erdees.netgurushoppinglist.Constants.FRAGMENT_NAME
 import com.erdees.netgurushoppinglist.R
 import com.erdees.netgurushoppinglist.Utils
-import com.erdees.netgurushoppinglist.Utils.makeGone
-import com.erdees.netgurushoppinglist.Utils.makeSnackbar
-import com.erdees.netgurushoppinglist.Utils.makeVisible
 import com.erdees.netgurushoppinglist.databinding.ActivityMainBinding
-import com.erdees.netgurushoppinglist.databinding.AddItemAlertDialogBinding
-import com.erdees.netgurushoppinglist.model.models.GroceryItem
-import com.erdees.netgurushoppinglist.model.models.ShoppingList
-import com.erdees.netgurushoppinglist.view.fragments.ArchivedShoppingListsFragment
-import com.erdees.netgurushoppinglist.view.fragments.ActiveShoppingListsFragment
-import com.erdees.netgurushoppinglist.viewModel.MainActivityViewModel
+import com.erdees.netgurushoppinglist.view.activeShoppingListFragment.ActiveShoppingListsFragment
+import com.erdees.netgurushoppinglist.view.archivedShoppingListFragment.ArchivedShoppingListsFragment
+import com.erdees.netgurushoppinglist.view.singleShoppingListFragment.SingleShoppingListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var viewBinding: ActivityMainBinding
-    private lateinit var viewModel: MainActivityViewModel
 
     private val activeShoppingListsFragment = ActiveShoppingListsFragment()
     private val archivedShoppingListFragment = ArchivedShoppingListsFragment()
+    val singleShoppingListFragment = SingleShoppingListFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        if (savedInstanceState != null) {
+            val fragment = supportFragmentManager.getFragment(savedInstanceState, FRAGMENT_NAME)
+            Utils.openFragment(fragment!!, fragment.tag!!, supportFragmentManager)
+            adjustUi()
+        } else openActiveShoppingListsFragment()
         val view = viewBinding.root
         setContentView(view)
-
-        viewModel = ViewModelProvider(this)[MainActivityViewModel::class.java]
-
-        viewModel.presentedShoppingList.observe(this, {
-            if (it != null) {
-                setUiForShoppingListDetails()
-            }
-        })
 
         viewBinding.bottomNavigation.setOnItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
@@ -51,54 +39,67 @@ class MainActivity : AppCompatActivity() {
                     openActiveShoppingListsFragment()
                 }
                 R.id.archivedShoppingList -> {
-                   openArchivedShoppingListsFragment()
+                    openArchivedShoppingListsFragment()
                 }
             }
             true
         }
-        openActiveShoppingListsFragment()
     }
 
-    private fun openActiveShoppingListsFragment(){
-        supportActionBar?.title = "Shopping lists"
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        supportFragmentManager.putFragment(
+            outState,
+            FRAGMENT_NAME,
+            supportFragmentManager.fragments.last()
+        );
+    }
+
+
+    private fun openActiveShoppingListsFragment() {
         Utils.openFragment(
             activeShoppingListsFragment,
             ActiveShoppingListsFragment.TAG,
             supportFragmentManager
         )
+        supportActionBar?.title = getString(R.string.shopping_lists)
     }
 
-    private fun openArchivedShoppingListsFragment(){
+    private fun openArchivedShoppingListsFragment() {
         Utils.openFragment(
             archivedShoppingListFragment,
             ArchivedShoppingListsFragment.TAG,
             supportFragmentManager
         )
-        supportActionBar?.title = "Archived shopping lists"
+        supportActionBar?.title = getString(R.string.archived_shopping_lists)
     }
 
-    private fun setUiForShoppingListDetails(){
+    private fun setUiForShoppingListDetails() {
         viewBinding.bottomNavigation.uncheckAllItems()
-        supportActionBar?.title = "Shopping list details"
+        supportActionBar?.title = getString(R.string.shopping_lists_details)
     }
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1) finish()
-        else super.onBackPressed()
-
+    private fun adjustUi() {
+        supportFragmentManager.fragments.last().tag?.let { Log.i(TAG, it) }
         when (supportFragmentManager.fragments.last().tag) {
             ActiveShoppingListsFragment.TAG -> {
                 viewBinding.bottomNavigation.selectedItemId = R.id.activeShoppingList
-                supportActionBar?.title = "Shopping lists"
+                supportActionBar?.title = getString(R.string.shopping_lists)
             }
             ArchivedShoppingListsFragment.TAG -> {
                 viewBinding.bottomNavigation.selectedItemId = R.id.archivedShoppingList
-                supportActionBar?.title = "Archived shopping lists"
+                supportActionBar?.title = getString(R.string.archived_shopping_lists)
             }
             else -> {
                 setUiForShoppingListDetails()
             }
         }
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) finish()
+        else super.onBackPressed()
+        adjustUi()
     }
 
     private fun BottomNavigationView.uncheckAllItems() {

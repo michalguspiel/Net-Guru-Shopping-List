@@ -6,7 +6,6 @@ import androidx.room.Room
 import com.erdees.netgurushoppinglist.model.dao.GroceryItemDao
 import com.erdees.netgurushoppinglist.model.dao.ShoppingListsDao
 import com.erdees.netgurushoppinglist.model.database.LocalDatabase
-import com.erdees.netgurushoppinglist.model.repositories.BusinessLogicRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,42 +21,36 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideApplication(@ApplicationContext app: Context): BaseApplication  {
+    fun provideApplication(@ApplicationContext app: Context): BaseApplication {
         return app as BaseApplication
     }
 
 
     @Singleton
     @Provides
-    fun provideActivity(@ActivityContext app : Activity) :Activity {
+    fun provideActivity(@ActivityContext app: Activity): Activity {
         return app
     }
 
     @Singleton
     @Provides
-    fun provideDatabase(@ApplicationContext app : Context ) = Room.databaseBuilder(
-            app,
-            LocalDatabase::class.java,
-            "database"
-        ).build()
+    fun provideDatabase(@ApplicationContext app: Context) = Room.databaseBuilder(
+        app,
+        LocalDatabase::class.java,
+        "database"
+    ).build()
 
 
     @Singleton
     @Provides
-    fun provideShoppingListsDao(db : LocalDatabase) : ShoppingListsDao {
+    fun provideShoppingListsDao(db: LocalDatabase): ShoppingListsDao {
         return db.shoppingListDao()
     }
 
     @Singleton
     @Provides
-    fun provideGroceryDao (db : LocalDatabase)  : GroceryItemDao {
+    fun provideGroceryDao(db: LocalDatabase): GroceryItemDao {
         return db.groceryItemDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideBusinessLogicRepository() : BusinessLogicRepository {
-        return BusinessLogicRepository()
     }
 
 
